@@ -73,13 +73,14 @@ namespace HandwrittenDigitRecognizer
         private void ResetPanel()
         {
             bmp = new Bitmap(panel1.ClientSize.Width, panel1.ClientSize.Height,
-                   System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                   PixelFormat.Format24bppRgb);
 
             for (int i = 0; i < bmp.Width; i++)
                 for (int j = 0; j < bmp.Height; j++)
                     bmp.SetPixel(i, j, Color.White);
 
             panel1.Invalidate();
+            lblGuess.Text = "";
         }
 
         private void Predict()
@@ -108,8 +109,16 @@ namespace HandwrittenDigitRecognizer
 
             Matrix output = cnn.Predict(input);
 
-            Console.WriteLine(output);
+            int maxIndex = output.GetMaxRowIndex();
+            string guessText;
+            guessText = string.Format("This is %{0:f2} a {1}", output[maxIndex, 0]*100, maxIndex);
+            lblGuess.Text = guessText;
 
+            lstOutput.Items.Clear();
+            for (int i = 0; i < output.rows; i++)
+            {
+                lstOutput.Items.Add(output[i, 0].ToString("F3"));
+            }
         }
 
         #endregion

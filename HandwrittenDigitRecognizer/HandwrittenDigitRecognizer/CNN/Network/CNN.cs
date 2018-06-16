@@ -12,7 +12,7 @@ namespace ConvNeuralNetwork
 
         private int nextLayerIndex;
 
-        private float learningRate;
+        private double learningRate;
 
         private Matrix target;
 
@@ -22,10 +22,10 @@ namespace ConvNeuralNetwork
 
         #region Constructors
 
-        public CNN(bool readFromConfig=true)
+        public CNN(string fileName=null)
         {
             // We are deserializing config file at the top of the constructor
-            if (readFromConfig)
+            if (string.IsNullOrEmpty(fileName))
             {
                 descriptions = DeserializeConfig();
                 layers = new Layer[descriptions.Length];
@@ -38,7 +38,7 @@ namespace ConvNeuralNetwork
             else
             {
                 //load descriptions from saved file
-                LoadData();
+                LoadData(fileName);
             }
 
             // First layer index is 0.
@@ -70,19 +70,17 @@ namespace ConvNeuralNetwork
 
                 case LayerType.FULLY_CONNECTED:
 
+                    // TODO: This code should be arranged with respect to new FC Layer Model
+
                     Layer previousLayer = layers[nextLayerIndex - 1];
-                    int inputNeurons = previousLayer.Output.Length * previousLayer.Output[0].cols * previousLayer.Output[0].rows;
+                    int[] topology = new int[description.layers + 1];
 
-                    int[] topology = new int[description.hiddens.Length + 2];
-
-                    topology[0] = inputNeurons;
-                    topology[topology.Length - 1] = description.outputs;
-
-                    for (int i = 1; i < topology.Length - 1; i++)
-                        topology[i] = description.hiddens[i - 1];
+                    topology[0] = previousLayer.Output.Length * previousLayer.Output[0].cols * previousLayer.Output[0].rows;
+                    for (int i = 1; i < topology.Length; i++)
+                        topology[i] = description.neurons[i - 1];
 
                     //FIXME:think about topology and find a better way to handle it
-                    newLayer = new FullyConLayer(topology, description.activationHidden, description.activation);
+                    newLayer = new FC_Network(topology, description.fc_activations.ToArray());
                     break;
 
                 default:
@@ -136,21 +134,37 @@ namespace ConvNeuralNetwork
             }
         }
 
-
-        public float GetError()
+        public double GetError()
         {
-            float error=0f;
             // Calculate the error 
             // ERROR = (1 / 2) * (TARGETS - OUTPUTS)^2
-            if (target != null)
-            {
-                Matrix outputError = target - Layers[Layers.Length - 1].Output[0];
-                outputError = Matrix.Multiply(outputError, outputError) / 2f;
 
-                 error = 0f;
-                for (int i = 0; i < outputError.rows; i++)
-                    error += outputError[i, 0];
-            }
+            //double error = 0f;
+            //if (target != null)
+            //{
+            //    Matrix outputError = target - Layers[Layers.Length - 1].Output[0];
+            //    outputError = Matrix.Multiply(outputError, outputError) / 2f;
+
+            //    for (int i = 0; i < outputError.rows; i++)
+            //        error += outputError[i, 0];
+            //}
+
+            //return error;
+
+            return CrossEntropy(Layers[Layers.Length - 1].Output[0], target);
+        }
+
+        public double CrossEntropy(Matrix p, Matrix c)
+        {
+            if (target == null)
+                return -1.0;
+
+            double error = 0.0;
+            Matrix errorMatrix = -Matrix.Multiply(c, Matrix.Log(p)) + Matrix.Multiply(1 - c, Matrix.Log(1 - p));
+
+            for (int i = 0; i < errorMatrix.rows; i++)
+                error += errorMatrix[i, 0];
+
             return error;
         }
 
@@ -170,7 +184,7 @@ namespace ConvNeuralNetwork
             set { nextLayerIndex = value; }
         }
 
-        public float LearningRate
+        public double LearningRate
         {
             get { return learningRate; }
             set { learningRate = value; }

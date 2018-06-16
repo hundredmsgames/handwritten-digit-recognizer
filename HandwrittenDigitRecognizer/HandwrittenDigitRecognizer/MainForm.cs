@@ -45,7 +45,7 @@ namespace HandwrittenDigitRecognizer
             {
                 using (Graphics g = Graphics.FromImage(bmp))
                 {
-                    Pen pen = new Pen(Color.Black, 20f);
+                    Pen pen = new Pen(Color.Black, 17f);
                     pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
                     pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
 
@@ -83,11 +83,14 @@ namespace HandwrittenDigitRecognizer
             lblGuess.Text = "";
         }
 
+        Matrix[] input = new Matrix[1];
+
         private void Predict()
         {
-            
+            string filePath = @"..\..\CNN\Configs\95,11__9__AFDAB.json";
+
             Bitmap resized = new Bitmap(bmp, new Size(28, 28));
-            Matrix[] input = new Matrix[1];
+            
             input[0] = new Matrix(resized.Width, resized.Height);
             byte[][] bytes = new byte[28][];
 
@@ -97,20 +100,23 @@ namespace HandwrittenDigitRecognizer
                 for(int j = 0; j < input[0].cols; j++)
                 {
                     Color c = resized.GetPixel(j, i);
+                    
                     input[0][i, j] = 255f - (c.R + c.G + c.B) / 3f;
                     bytes[i][j] = (byte) (255 - (c.R + c.G + c.B) / 3);
                 }
             }
 
-            DigitImage di = new DigitImage(bytes, 1);
-            //Console.WriteLine(di);
+            //DigitImage di = new DigitImage(bytes, 1);
 
-            CNN cnn = new CNN(false);
+            
+            Console.WriteLine(input[0].ToString());
 
+            CNN cnn = new CNN(filePath);
             Matrix output = cnn.Predict(input);
 
             int maxIndex = output.GetMaxRowIndex();
             string guessText;
+
             guessText = string.Format("This is %{0:f2} a {1}", output[maxIndex, 0]*100, maxIndex);
             lblGuess.Text = guessText;
 
@@ -122,5 +128,27 @@ namespace HandwrittenDigitRecognizer
         }
 
         #endregion
+
+        int idx = 0;
+
+        private void Button_Next_Click(object sender, EventArgs e)
+        {
+            DigitImage[] digitImages = MNIST_Parser.ReadFromFile(DataSet.Training, 10000);
+            input[0] = new Matrix(digitImages[idx++].pixels);
+
+            Bitmap b = new Bitmap(28, 28);
+            for (int i = 0; i < b.Width; i++)
+            {
+                for (int j = 0; j < b.Height; j++)
+                {
+                    b.SetPixel(i, j, Color.FromArgb((byte)(255 - input[0][j, i]), (byte)(255 -input[0][j, i]), (byte)(255 -input[0][j, i])));
+                }
+            }
+
+            bmp = new Bitmap(b, new Size(bmp.Width, bmp.Height));
+            panel1.Invalidate();
+
+            Predict();
+        }
     }
 }

@@ -54,7 +54,8 @@
     <Compile Include="CNN\Helpers\MNIST_Parser.cs" />
     <Compile Include="CNN\Helpers\Structures.cs" />
     <Compile Include="CNN\Layers\ConvLayer.cs" />
-    <Compile Include="CNN\Layers\FullyConLayer.cs" />
+    <Compile Include="CNN\Layers\FC_Layer.cs" />
+    <Compile Include="CNN\Layers\FC_Network.cs" />
     <Compile Include="CNN\Layers\InputLayer.cs" />
     <Compile Include="CNN\Layers\Layer.cs" />
     <Compile Include="CNN\Layers\MaxPoolingLayer.cs" />
@@ -86,8 +87,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="CNN\Configs\95,06__10__AEDEF.json" />
+    <None Include="CNN\Configs\95,11__9__AFDAB.json" />
     <None Include="CNN\Configs\config.cfg" />
-    <None Include="CNN\Configs\network.json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

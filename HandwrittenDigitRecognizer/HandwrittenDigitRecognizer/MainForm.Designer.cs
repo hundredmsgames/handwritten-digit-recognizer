@@ -33,14 +33,14 @@
             this.lstOutput = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new HandwrittenDigitRecognizer.DrawingPanel();
+            this.Button_Next = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_Reset
             // 
-            this.button_Reset.Location = new System.Drawing.Point(133, 259);
-            this.button_Reset.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button_Reset.Location = new System.Drawing.Point(50, 210);
             this.button_Reset.Name = "button_Reset";
-            this.button_Reset.Size = new System.Drawing.Size(119, 41);
+            this.button_Reset.Size = new System.Drawing.Size(89, 33);
             this.button_Reset.TabIndex = 1;
             this.button_Reset.Text = "Reset";
             this.button_Reset.UseVisualStyleBackColor = true;
@@ -50,53 +50,64 @@
             // 
             this.lblGuess.AutoSize = true;
             this.lblGuess.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.lblGuess.Location = new System.Drawing.Point(61, 304);
+            this.lblGuess.Location = new System.Drawing.Point(46, 247);
+            this.lblGuess.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblGuess.Name = "lblGuess";
-            this.lblGuess.Size = new System.Drawing.Size(0, 32);
+            this.lblGuess.Size = new System.Drawing.Size(0, 26);
             this.lblGuess.TabIndex = 2;
             // 
             // lstOutput
             // 
             this.lstOutput.FormattingEnabled = true;
-            this.lstOutput.ItemHeight = 16;
-            this.lstOutput.Location = new System.Drawing.Point(369, 31);
+            this.lstOutput.Location = new System.Drawing.Point(277, 25);
+            this.lstOutput.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lstOutput.Name = "lstOutput";
-            this.lstOutput.Size = new System.Drawing.Size(120, 212);
+            this.lstOutput.Size = new System.Drawing.Size(91, 173);
             this.lstOutput.TabIndex = 3;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(369, 8);
+            this.label1.Location = new System.Drawing.Point(277, 6);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(51, 17);
+            this.label1.Size = new System.Drawing.Size(39, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Output";
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Location = new System.Drawing.Point(67, 15);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4);
+            this.panel1.Location = new System.Drawing.Point(50, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(255, 236);
+            this.panel1.Size = new System.Drawing.Size(192, 192);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel1_Paint);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Panel1_MouseDown);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Panel1_MouseMove);
             this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Panel1_MouseUp);
             // 
+            // Button_Next
+            // 
+            this.Button_Next.Location = new System.Drawing.Point(153, 210);
+            this.Button_Next.Name = "Button_Next";
+            this.Button_Next.Size = new System.Drawing.Size(89, 33);
+            this.Button_Next.TabIndex = 5;
+            this.Button_Next.Text = "Next";
+            this.Button_Next.UseVisualStyleBackColor = true;
+            this.Button_Next.Click += new System.EventHandler(this.Button_Next_Click);
+            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(535, 364);
+            this.ClientSize = new System.Drawing.Size(401, 296);
+            this.Controls.Add(this.Button_Next);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lstOutput);
             this.Controls.Add(this.lblGuess);
             this.Controls.Add(this.button_Reset);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -111,6 +122,7 @@
         private System.Windows.Forms.Label lblGuess;
         private System.Windows.Forms.ListBox lstOutput;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button Button_Next;
     }
 }
 

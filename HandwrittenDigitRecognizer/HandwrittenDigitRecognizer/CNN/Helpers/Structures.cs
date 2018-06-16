@@ -33,9 +33,9 @@ namespace ConvNeuralNetwork
         public ActivationType activation;
 
         // fc layer
-        public int[] hiddens;
-        public int outputs;
-        public ActivationType activationHidden;
+        public int layers;
+        public List<int> neurons;
+        public List<ActivationType> fc_activations;
 
         public LayerType layerType;
 
@@ -43,22 +43,39 @@ namespace ConvNeuralNetwork
         {
             string ret = "";
             ret += string.Format(
-                "layerType = {0}\n" + 
-                "width = {2}\n" +
-                "height = {3}\n" +
-                "channels = {4}\n" +
-                "filters = {5}\n" +
-                "kernelSize = {6}\n" +
-                "stride = {7}\n" +
-                "padding = {8}\n" +
-                "activation_hidden = {9}\n" +
-                "activation = {10}\n" +
-                "hiddens = {11}\n" +
-                "outputs = {12}\n" +
-                "\n",
+                "layerType = {0}\n" +
+                "width = {1}\n" +
+                "height = {2}\n" +
+                "channels = {3}\n" +
+                "filters = {4}\n" +
+                "kernelSize = {5}\n" +
+                "stride = {6}\n" +
+                "padding = {7}\n",
                 layerType, width, height, channels, filters,
-                kernelSize, stride, padding, activationHidden, activation, hiddens, outputs
+                kernelSize, stride, padding
             );
+
+            if (neurons != null)
+            {
+                ret += "neurons = ";
+                foreach (int i in neurons)
+                    ret += i + ", ";
+                ret = ret.TrimEnd(',', ' ');
+                ret += "\n";
+            }
+
+            if (fc_activations != null)
+            {
+                ret += "activations = ";
+                foreach(ActivationType act in fc_activations)
+                    ret += act.ToString() + ", ";
+                ret = ret.TrimEnd(',', ' ');
+                ret += "\n";
+            }
+            else
+            {
+                ret += string.Format("activation = {0}\n", activation);
+            }
 
             return ret;
         }

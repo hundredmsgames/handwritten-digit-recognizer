@@ -6,11 +6,13 @@ namespace ConvNeuralNetwork
         INPUT,
         CONVOLUTIONAL,
         MAXPOOLING,
-        FULLY_CONNECTED
+        FULLY_CONNECTED,
+        FC_LAYER
     }
 
     enum ActivationType : byte
     {
+        NONE,
         RELU,
         SIGMOID,
         SOFTMAX,

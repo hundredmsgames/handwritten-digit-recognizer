@@ -12,9 +12,10 @@ namespace ConvNeuralNetwork
         private int stride;
         private int padding;
         private Matrix[,] kernels;
+        private Matrix biases;
 
-        Func<float, float> activation;
-        Func<float, float> derOfActivation;
+        Func<Matrix, Matrix> activation;
+        Func<Matrix, Matrix> derOfActivation;
 
         #endregion
 
@@ -34,9 +35,7 @@ namespace ConvNeuralNetwork
                 padding = 0;
             }
 
-            var activations = ActivationFunctions.GetActivationFuncs(activationType);
-            activation = activations.Item1;
-            derOfActivation = activations.Item2;
+            ActivationFunctions.GetActivationFuncs(activationType, out activation, out derOfActivation);
         }
 
         public override void Initialize()
@@ -72,6 +71,10 @@ namespace ConvNeuralNetwork
                     kernels[i, j].Randomize();
                 }
             }
+
+            // Initalize biases
+            biases = new Matrix(filters, 1);
+            biases.Randomize();
         }
 
         #endregion
@@ -105,10 +108,11 @@ namespace ConvNeuralNetwork
                                 }
                             }
                         }
-
-                        Output[fil_idx][out_idx_r, out_idx_c] = activation(Output[fil_idx][out_idx_r, out_idx_c]);
                     }
                 }
+
+                Output[fil_idx] = activation(Output[fil_idx]);
+                Output[fil_idx] += biases[fil_idx, 0];
             }
 
             this.OutputLayer.Input = Output;
@@ -119,6 +123,7 @@ namespace ConvNeuralNetwork
             base.Backpropagation();
 
             Matrix kernel_d_E = new Matrix(kernel_size, kernel_size);
+            Matrix bias_d_E = new Matrix(Filters, 1);
 
             for (int fil_idx = 0; fil_idx < Filters; fil_idx++)
             {
@@ -127,23 +132,25 @@ namespace ConvNeuralNetwork
                     //reset values
                     InputLayer.Output_d_E[ch].FillZero();
                     kernel_d_E.FillZero();
+                    bias_d_E.FillZero();
+
+                    Matrix derAct = derOfActivation(Output[fil_idx]);
 
                     for (int i = 0, r = 0; r < Output_d_E[fil_idx].rows && i < Input[ch].rows; i += stride, r++)
                     {
                         for (int j = 0, c = 0; c < Output_d_E[fil_idx].cols && j < Input[ch].cols; j += stride, c++)
                         {
-                            float derOfAct = derOfActivation(Output[fil_idx][r, c]);
-
                             for (int p = 0; p < kernel_size; p++)
                             {
                                 for (int q = 0; q < kernel_size; q++)
                                 {
-                                    kernel_d_E[p, q] += derOfAct * Output_d_E[fil_idx][r, c] * Input[ch][i + p, j + q];
+                                    kernel_d_E[p, q] += derAct[r, c] * Output_d_E[fil_idx][r, c] * Input[ch][i + p, j + q];
+                                    bias_d_E[fil_idx, 0] += derAct[r, c] * Output_d_E[fil_idx][r, c];
 
                                     if (LayerIndex != 1)
                                     {
                                         InputLayer.Output_d_E[ch][i + p, j + q] +=
-                                            kernels[fil_idx, ch][p, q] * derOfAct * Output_d_E[fil_idx][r, c];
+                                            kernels[fil_idx, ch][p, q] * derAct[r, c] * Output_d_E[fil_idx][r, c];
                                     }
                                 }
                             }               
@@ -151,6 +158,7 @@ namespace ConvNeuralNetwork
                     }
 
                     kernels[fil_idx, ch] = kernels[fil_idx, ch] - (Network.LearningRate * kernel_d_E);
+                    biases[fil_idx, 0] = biases[fil_idx, 0] - (Network.LearningRate * bias_d_E[fil_idx, 0]);
                 }
             }
         }
@@ -181,6 +189,12 @@ namespace ConvNeuralNetwork
         {
             get { return kernels; }
              set { kernels = value; }
+        }
+
+        public Matrix Biases
+        {
+            get { return biases; }
+            set { biases = value; }
         }
 
         public int Padding { get => padding; set => padding = value; }

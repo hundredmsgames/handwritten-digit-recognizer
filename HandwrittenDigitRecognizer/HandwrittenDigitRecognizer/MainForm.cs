@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using MatrixLib;
 using ConvNeuralNetwork;
+using System.IO;
 
 namespace HandwrittenDigitRecognizer
 {
@@ -14,6 +15,9 @@ namespace HandwrittenDigitRecognizer
 
         Bitmap bmp;
         Point lastPoint;
+
+        int maxIndex;
+        byte[][] bytes;
 
         List<int> numPool;
         Random rnd;
@@ -100,7 +104,7 @@ namespace HandwrittenDigitRecognizer
             Bitmap resized = new Bitmap(bmp, new Size(28, 28));
             
             input[0] = new Matrix(resized.Width, resized.Height);
-            byte[][] bytes = new byte[28][];
+            bytes = new byte[28][];
 
             for (int i = 0; i < input[0].rows; i++)
             {
@@ -108,9 +112,8 @@ namespace HandwrittenDigitRecognizer
                 for(int j = 0; j < input[0].cols; j++)
                 {
                     Color c = resized.GetPixel(j, i);
-                    
-                    input[0][i, j] = 255f - (c.R + c.G + c.B) / 3f;
-                    bytes[i][j] = (byte) (255 - (c.R + c.G + c.B) / 3);
+                    input[0][i, j] = 255f - c.R;
+                    bytes[i][j] = (byte) (255 - c.R);
                 }
             }
             input[0].Normalize(0f, 255f, 0f, 1f);
@@ -118,7 +121,7 @@ namespace HandwrittenDigitRecognizer
             CNN cnn = new CNN(filePath);
             Matrix output = cnn.Predict(input);
 
-            int maxIndex = output.GetMaxRowIndex();
+            maxIndex = output.GetMaxRowIndex();
             string guessText;
 
             guessText = string.Format("This is %{0:f2} a {1}", output[maxIndex, 0]*100, maxIndex);
@@ -131,7 +134,37 @@ namespace HandwrittenDigitRecognizer
             }
         }
 
-        #endregion
+        bool headerAdded = false;
+        private void SaveToCSV(byte[][] input, int label, int prediction)
+        {
+            string content = "";
+
+            if(headerAdded == false)
+            {
+                for (int i = 0; i < 28; ++i)
+                {
+                    for (int j = 0; j < 28; ++j)
+                    {
+                        content += "px" + ((i * 28) + j) + ", ";
+                    }
+                }
+                content += "label, prediction" + Environment.NewLine;
+
+                headerAdded = true;
+            }
+            
+            for (int i = 0; i < 28; ++i)
+            {
+                for(int j = 0; j < 28; ++j)
+                {
+                    content += input[i][j] + ", ";
+                }
+            }
+            content += label + ", " + prediction;
+
+            File.AppendAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "drawnDigits.csv"),
+                        content + Environment.NewLine);
+        }
 
         private void Button_Next_Click(object sender, EventArgs e)
         {
@@ -146,7 +179,7 @@ namespace HandwrittenDigitRecognizer
             {
                 for (int j = 0; j < b.Height; j++)
                 {
-                    b.SetPixel(i, j, Color.FromArgb((byte)(255 - input[0][j, i]), (byte)(255 -input[0][j, i]), (byte)(255 -input[0][j, i])));
+                    b.SetPixel(i, j, Color.FromArgb((byte)(255 - input[0][j, i]), (byte)(255 - input[0][j, i]), (byte)(255 - input[0][j, i])));
                 }
             }
 
@@ -154,6 +187,13 @@ namespace HandwrittenDigitRecognizer
             panel1.Invalidate();
 
             Predict();
+        }
+
+        #endregion
+
+        private void lstOutput_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SaveToCSV(bytes, lstOutput.SelectedIndex, maxIndex);
         }
     }
 }

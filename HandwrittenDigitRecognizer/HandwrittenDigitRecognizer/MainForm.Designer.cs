@@ -65,6 +65,7 @@
             this.lstOutput.Name = "lstOutput";
             this.lstOutput.Size = new System.Drawing.Size(91, 173);
             this.lstOutput.TabIndex = 3;
+            this.lstOutput.SelectedIndexChanged += new System.EventHandler(this.lstOutput_SelectedIndexChanged);
             // 
             // label1
             // 

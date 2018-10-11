@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
@@ -14,6 +15,8 @@ namespace HandwrittenDigitRecognizer
         Bitmap bmp;
         Point lastPoint;
 
+        List<int> numPool;
+        Random rnd;
         #endregion
 
         #region CTOR
@@ -23,6 +26,11 @@ namespace HandwrittenDigitRecognizer
             InitializeComponent();
 
             ResetPanel();
+
+            rnd = new Random();
+            numPool = new List<int>();
+            for (int i = 0; i < 10000; ++i)
+                numPool.Add(i);
         }
 
         #endregion
@@ -105,11 +113,7 @@ namespace HandwrittenDigitRecognizer
                     bytes[i][j] = (byte) (255 - (c.R + c.G + c.B) / 3);
                 }
             }
-
-            //DigitImage di = new DigitImage(bytes, 1);
-
-            
-            Console.WriteLine(input[0].ToString());
+            input[0].Normalize(0f, 255f, 0f, 1f);
 
             CNN cnn = new CNN(filePath);
             Matrix output = cnn.Predict(input);
@@ -129,12 +133,13 @@ namespace HandwrittenDigitRecognizer
 
         #endregion
 
-        int idx = 0;
-
         private void Button_Next_Click(object sender, EventArgs e)
         {
             DigitImage[] digitImages = MNIST_Parser.ReadFromFile(DataSet.Training, 10000);
-            input[0] = new Matrix(digitImages[idx++].pixels);
+
+            int idx = numPool[rnd.Next(0, numPool.Count)];
+            numPool.RemoveAt(idx);
+            input[0] = new Matrix(digitImages[idx].pixels);
 
             Bitmap b = new Bitmap(28, 28);
             for (int i = 0; i < b.Width; i++)

@@ -53,14 +53,15 @@
             this.lblGuess.Location = new System.Drawing.Point(46, 247);
             this.lblGuess.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblGuess.Name = "lblGuess";
-            this.lblGuess.Size = new System.Drawing.Size(0, 26);
+            this.lblGuess.Size = new System.Drawing.Size(142, 26);
             this.lblGuess.TabIndex = 2;
+            this.lblGuess.Text = "This is 99% 3";
             // 
             // lstOutput
             // 
             this.lstOutput.FormattingEnabled = true;
             this.lstOutput.Location = new System.Drawing.Point(277, 25);
-            this.lstOutput.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lstOutput.Margin = new System.Windows.Forms.Padding(2);
             this.lstOutput.Name = "lstOutput";
             this.lstOutput.Size = new System.Drawing.Size(91, 173);
             this.lstOutput.TabIndex = 3;
@@ -101,7 +102,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(401, 296);
+            this.ClientSize = new System.Drawing.Size(407, 290);
             this.Controls.Add(this.Button_Next);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lstOutput);

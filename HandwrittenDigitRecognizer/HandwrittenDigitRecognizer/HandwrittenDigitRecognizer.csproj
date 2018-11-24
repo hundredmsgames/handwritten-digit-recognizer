@@ -52,6 +52,7 @@
     <Compile Include="CNN\Helpers\Enums.cs" />
     <Compile Include="CNN\Helpers\JSONFileController.cs" />
     <Compile Include="CNN\Helpers\MNIST_Parser.cs" />
+    <Compile Include="CNN\Helpers\PreProcessing.cs" />
     <Compile Include="CNN\Helpers\Structures.cs" />
     <Compile Include="CNN\Layers\ConvLayer.cs" />
     <Compile Include="CNN\Layers\FC_Layer.cs" />

@@ -32,8 +32,12 @@
             this.lblGuess = new System.Windows.Forms.Label();
             this.lstOutput = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.panel1 = new HandwrittenDigitRecognizer.DrawingPanel();
             this.Button_Next = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.panel1 = new HandwrittenDigitRecognizer.DrawingPanel();
+            this.pbProccessedImage = new System.Windows.Forms.PictureBox();
+            this.chcBProcessingActive = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pbProccessedImage)).BeginInit();
             this.SuspendLayout();
             // 
             // button_Reset
@@ -60,7 +64,7 @@
             // lstOutput
             // 
             this.lstOutput.FormattingEnabled = true;
-            this.lstOutput.Location = new System.Drawing.Point(277, 25);
+            this.lstOutput.Location = new System.Drawing.Point(468, 31);
             this.lstOutput.Margin = new System.Windows.Forms.Padding(2);
             this.lstOutput.Name = "lstOutput";
             this.lstOutput.Size = new System.Drawing.Size(91, 173);
@@ -70,12 +74,32 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(277, 6);
+            this.label1.Location = new System.Drawing.Point(465, 9);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(39, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Output";
+            // 
+            // Button_Next
+            // 
+            this.Button_Next.Location = new System.Drawing.Point(153, 210);
+            this.Button_Next.Name = "Button_Next";
+            this.Button_Next.Size = new System.Drawing.Size(89, 33);
+            this.Button_Next.TabIndex = 5;
+            this.Button_Next.Text = "Next";
+            this.Button_Next.UseVisualStyleBackColor = true;
+            this.Button_Next.Click += new System.EventHandler(this.Button_Next_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(328, 207);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(63, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Proccessed";
             // 
             // panel1
             // 
@@ -89,22 +113,34 @@
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Panel1_MouseMove);
             this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Panel1_MouseUp);
             // 
-            // Button_Next
+            // pbProccessedImage
             // 
-            this.Button_Next.Location = new System.Drawing.Point(153, 210);
-            this.Button_Next.Name = "Button_Next";
-            this.Button_Next.Size = new System.Drawing.Size(89, 33);
-            this.Button_Next.TabIndex = 5;
-            this.Button_Next.Text = "Next";
-            this.Button_Next.UseVisualStyleBackColor = true;
-            this.Button_Next.Click += new System.EventHandler(this.Button_Next_Click);
+            this.pbProccessedImage.Location = new System.Drawing.Point(259, 12);
+            this.pbProccessedImage.Name = "pbProccessedImage";
+            this.pbProccessedImage.Size = new System.Drawing.Size(192, 192);
+            this.pbProccessedImage.TabIndex = 6;
+            this.pbProccessedImage.TabStop = false;
+            // 
+            // chcBProcessingActive
+            // 
+            this.chcBProcessingActive.AutoSize = true;
+            this.chcBProcessingActive.Location = new System.Drawing.Point(273, 225);
+            this.chcBProcessingActive.Name = "chcBProcessingActive";
+            this.chcBProcessingActive.Size = new System.Drawing.Size(117, 17);
+            this.chcBProcessingActive.TabIndex = 7;
+            this.chcBProcessingActive.Text = "Proccessing Active";
+            this.chcBProcessingActive.UseVisualStyleBackColor = true;
+            this.chcBProcessingActive.CheckedChanged += new System.EventHandler(this.chcBProcessingActive_CheckedChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(407, 290);
+            this.ClientSize = new System.Drawing.Size(598, 290);
+            this.Controls.Add(this.chcBProcessingActive);
+            this.Controls.Add(this.pbProccessedImage);
             this.Controls.Add(this.Button_Next);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lstOutput);
             this.Controls.Add(this.lblGuess);
@@ -112,6 +148,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "MainForm";
             this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.pbProccessedImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -125,6 +162,9 @@
         private System.Windows.Forms.ListBox lstOutput;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button Button_Next;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.PictureBox pbProccessedImage;
+        private System.Windows.Forms.CheckBox chcBProcessingActive;
     }
 }
 

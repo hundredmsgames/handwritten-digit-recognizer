@@ -5,6 +5,8 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using MatrixLib;
 using ConvNeuralNetwork;
+using CnnNetwork = ConvNeuralNetwork.CNN;
+using HandwrittenDigitRecognizer.CNN.Helpers;
 using System.IO;
 
 namespace HandwrittenDigitRecognizer
@@ -14,6 +16,7 @@ namespace HandwrittenDigitRecognizer
         #region Variables
 
         Bitmap bmp;
+
         Point lastPoint;
 
         int maxIndex;
@@ -21,6 +24,8 @@ namespace HandwrittenDigitRecognizer
 
         List<int> numPool;
         Random rnd;
+
+        bool processingActive=false;
         #endregion
 
         #region CTOR
@@ -57,7 +62,7 @@ namespace HandwrittenDigitRecognizer
             {
                 using (Graphics g = Graphics.FromImage(bmp))
                 {
-                    Pen pen = new Pen(Color.Black, 17f);
+                    Pen pen = new Pen(Color.Black, 10f);
                     pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
                     pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
 
@@ -102,7 +107,15 @@ namespace HandwrittenDigitRecognizer
             string filePath = @"..\..\CNN\Configs\95,11__9__AFDAB.json";
 
             Bitmap resized = new Bitmap(bmp, new Size(28, 28));
-            
+            Bitmap preProcessing=null;
+            if (processingActive)
+                preProcessing = PreProcessing.MedianSmoothing(resized, 3);
+            else
+                preProcessing = resized;
+            Bitmap preproccessedImage = new Bitmap(preProcessing, new Size(bmp.Width,bmp.Height));
+            pbProccessedImage.Image = preproccessedImage;
+
+            resized = preProcessing;
             input[0] = new Matrix(resized.Width, resized.Height);
             bytes = new byte[28][];
 
@@ -118,7 +131,7 @@ namespace HandwrittenDigitRecognizer
             }
             input[0].Normalize(0f, 255f, 0f, 1f);
 
-            CNN cnn = new CNN(filePath);
+            CnnNetwork cnn = new CnnNetwork(filePath);
             Matrix output = cnn.Predict(input);
 
             maxIndex = output.GetMaxRowIndex();
@@ -194,6 +207,12 @@ namespace HandwrittenDigitRecognizer
         private void lstOutput_SelectedIndexChanged(object sender, EventArgs e)
         {
             SaveToCSV(bytes, lstOutput.SelectedIndex, maxIndex);
+        }
+
+        private void chcBProcessingActive_CheckedChanged(object sender, EventArgs e)
+        {
+            processingActive = chcBProcessingActive.Checked;
+            Predict();
         }
     }
 }

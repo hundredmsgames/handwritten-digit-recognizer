@@ -27,7 +27,7 @@ namespace HandwrittenDigitRecognizer.CNN.Helpers
                             kernelValues[kernelSize * x + y] = image.GetPixel(i + x, j + y).R;
                         }
                     }
-                    int median = kernelValues.OrderBy(x => x).ElementAt((kernelSize / 2)+1);
+                    int median = kernelValues.OrderBy(x => x).ElementAt((kernelSize*kernelSize/2)+1);
                     proccessedImage.SetPixel(i + 1, j + 1, Color.FromArgb(median, median, median));
                 }
             }

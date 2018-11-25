@@ -62,7 +62,7 @@ namespace HandwrittenDigitRecognizer
             {
                 using (Graphics g = Graphics.FromImage(bmp))
                 {
-                    Pen pen = new Pen(Color.Black, 10f);
+                    Pen pen = new Pen(Color.Black, 25f);
                     pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
                     pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
 

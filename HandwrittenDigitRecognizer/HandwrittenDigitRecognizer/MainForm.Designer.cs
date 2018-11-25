@@ -115,6 +115,7 @@
             // 
             // pbProccessedImage
             // 
+            this.pbProccessedImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbProccessedImage.Location = new System.Drawing.Point(259, 12);
             this.pbProccessedImage.Name = "pbProccessedImage";
             this.pbProccessedImage.Size = new System.Drawing.Size(192, 192);
